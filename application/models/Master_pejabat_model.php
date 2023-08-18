@@ -1,11 +1,17 @@
 <?php
 class Master_pejabat_model extends CI_Model {
-    
-    public function get_all()
-    {
-        return $this->db->get('master_pejabat')->result();
-    }
 
+     public function get_data($start, $length, $search) {
+        $this->db->select('*');
+        $this->db->from('master_pejabat');
+        if (!empty($search)) {
+            $this->db->like('nama', $search); 
+        }
+            $this->db->order_by('id', 'asc'); 
+            $this->db->limit($length, $start);
+            return $this->db->get()->result();
+    }
+        
     public function get_by_id($id)
     {
         return $this->db->get_where('master_pejabat', array('id' => $id))->row();
@@ -37,29 +43,22 @@ class Master_pejabat_model extends CI_Model {
 
     public function get_pejabat_options() 
     {
-        $this->db->select('id, nama'); // Kolom yang ingin ditampilkan sebagai pilihan
+        $this->db->select('id, nama'); // Kolom yang ingin ditampilkan 
         $query = $this->db->get('master_pejabat');
         return $query->result();
     }
 
-    public function searchNamaJabatan($search) {
-        $this->db->like('nama', $search); // Melakukan pencarian pada kolom 'nama'
-        $query = $this->db->get('master_pejabat'); //tabel yang diambil
-
-        return $query->result();
+    public function get_total_records() {
+        return $this->db->count_all('master_pejabat');
     }
 
-    public function countPejabat()
-    {
-        return $this->db->count_all_results('master_pejabat'); // Ganti 'pejabat' sesuai dengan tabel Anda
+    public function get_filtered_records($search) {
+        $this->db->like('nama', $search); // kolom yang ingin Anda cari
+        return $this->db->get('master_pejabat')->num_rows();
     }
 
-    public function getPejabat($limit, $offset)
-    {
-        $this->db->limit($limit, $offset); // Menetapkan limit dan offset
-        $query = $this->db->get('master_pejabat'); // Mengambil data dari tabel 'master_pejabat'
-        return $query->result();
-    }
+
+
 
 }
 ?>

@@ -31,10 +31,10 @@
                 <?php endif; ?>
                 <br>
 
-                <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-master">
+                <table width="100%" class="table table-striped table-bordered table-hover" id="table">
                     <thead>
                         <tr>
-                            <th>NO</th>
+                        <th>NO</th>
                             <th>ID</th>
                             <th>NAMA</th>
                             <th>TANGGAL BUAT</th>
@@ -43,28 +43,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
-                            $no = 0;
-                            foreach ($pejabat_list as $pejabat)  { 
-                            $no = $no + 1;
-                        ?>
 
-                        <tr>
-                            <td><?php echo $no; ?></td>
-                            <td><?php echo $pejabat->id; ?></td>
-                            <td><?php echo $pejabat->nama; ?></td>
-                            <td><?php echo $pejabat->tglBuat; ?></td>
-                            <td><?php echo $pejabat->tglUbah; ?></td>
-                            <td>
-                                <a class="btn btn-sm btn-warning" href="<?php echo site_url('master_pejabat/edit/' . $pejabat->id); ?>">Edit</a>
-                                <a class="btn btn-sm btn-danger" href="<?php echo site_url('master_pejabat/delete/' . $pejabat->id); ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus pejabat ini?')">Delete</a>
-                            </td>
-                        </tr>
-
-                        <?Php } ?>
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
@@ -110,13 +91,57 @@
     <script src="<?php echo base_url('vendor/datatables-responsive/dataTables.responsive.js') ?>"  ></script>
 
     <script>
-    $(document).ready(function() {
-        $('#dataTables-master').DataTable({
-            responsive: true
+        $(document).ready(function() {
+            $('#table').DataTable({
+                "processing": true,
+                "serverSide": true,
+
+                "order": [], 
+                "ajax": {
+                    "url": "<?php echo site_url('master_pejabat/get_data'); ?>",
+                    "type": "POST"
+                },
+                "columns": [
+
+                        {"data": null,width: 30}, 
+                        {"data": "id",width:30},
+                        {"data": "nama",width:200},
+                        {"data": "tglBuat",width:150},
+                        {"data": "tglUbah",width:150},
+                        {
+                            "data": null,
+                            "width": 100,
+                            "orderable": false,
+                            "render": function(data, type, row) {
+                                var editUrl = "<?php echo site_url('master_pejabat/edit'); ?>/" + row.id;
+                                var deleteUrl = "<?php echo site_url('master_pejabat/delete'); ?>/" + row.id;
+
+                                return '<a href="' + editUrl + '" class="btn btn-warning btn-sm">Edit</a>' +
+                                        ' ' +
+                                    '<a href="' + deleteUrl + '" class="btn btn-danger btn-sm" onclick="return confirmDelete()">Delete</a>';
+
+                            }
+                        }
+                ],
+                "createdRow": function(row, data, index) {
+                $('td', row).eq(0).html(index + 1);
+            }
+                
+            });
         });
-    });
     </script>
-    
+
+    <script>
+        function confirmDelete() {
+    return confirm('Apakah Anda yakin ingin menghapus data ini?');
+}
+    </script>
+
 </body>
 
 </html>
+
+
+
+
+

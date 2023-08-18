@@ -7,18 +7,34 @@ class Pejabat extends CI_Controller {
         $this->load->model('Pejabat_model');
         $this->load->model('Master_pejabat_model');
     }
-    
-    public function index()
-    {
 
-        $search = $this->input->get('search'); // Mendapatkan nilai search dari query string
-        if (!empty($search)) {
-            $data['pejabat_list'] = $this->Pejabat_model->cariPejabatByNama($search);
-        } else {
-            $data['pejabat_list']= $this->Pejabat_model->get_all();
-        }
-        $this->load->view('pejabat/index', $data);
+    public function index() {
+
+        $this->load->view('pejabat/index');
     }
+
+    public function get_data() {
+        $draw = $this->input->post('draw');
+        $start = $this->input->post('start');
+        $length = $this->input->post('length');
+        $search = $this->input->post('search')['value'];
+
+        $recordsTotal = $this->Pejabat_model->get_total_records();
+        $recordsFiltered = $this->Pejabat_model->get_filtered_records($search);
+        $data = $this->Pejabat_model->get_data($start, $length, $search); 
+
+        $response = array(
+            "draw" => intval($draw),
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $data
+        );
+
+        echo json_encode($response);
+    }
+
+
+
 
     public function create()
     {

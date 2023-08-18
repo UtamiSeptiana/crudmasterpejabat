@@ -24,47 +24,29 @@
                     <div class="alert-success">
                         <?php echo $this->session->flashdata('success'); ?>
                     </div>
-                <?php elseif ($this->session->flashdata('error')): ?>
+                <?php echo $this->session->flashdata('error'); ?>
                     <div class="alert-danger">
                         <?php echo $this->session->flashdata('error'); ?>
                     </div>
                 <?php endif; ?>
                 <br>
 
-                <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-pejabat">
+                <table width="100%" class="table table-striped table-bordered table-hover" id="table">
                     <thead>
                         <tr>
-                            <th>NO</th>
+                        <th>NO</th>
+                            <th>ID</th>
                             <th>NAMA</th>
                             <th>JENIS KELAMIN</th>
                             <th>ALAMAT</th>
-                            <th>MASTER PEJABAT ID</th>
+                            <th>M_PEJABAT_ID</th>
                             <th>TANGGAL BUAT</th>
                             <th>TANGGAL UBAH</th>
                             <th>AKSI</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        <?php 
-                            $no = 0;
-                            foreach ($pejabat_list as $pejabat)  { 
-                            $no = $no + 1;
-                        ?>
-                        <tr>
-                            <td><?php echo $no; ?></td>
-                            <td><?php echo $pejabat->nama; ?></td>
-                            <td><?php echo $pejabat->jenis_kelamin; ?></td>
-                            <td><?php echo $pejabat->alamat; ?></td>
-                            <td><?php echo $pejabat->nama_master; ?></td>
-                            <td><?php echo $pejabat->tglBuat; ?></td>
-                            <td><?php echo $pejabat->tglUbah; ?></td>
-                            <td>
-                                <a class="btn btn-sm btn-warning" href="<?php echo site_url('pejabat/edit/' . $pejabat->id); ?>">Edit</a>
-                                <a class="btn btn-sm btn-danger" href="<?php echo site_url('pejabat/delete/' . $pejabat->id); ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus pejabat ini?')">Delete</a>
-                            </td>
-                        </tr>
-                        <?Php }  ?>
+
                     </tbody>
                 </table>
             </div>
@@ -76,7 +58,6 @@
 <!--                    SELESAI TAMPILAN ISI                            -->
 <!-- ================================================================== -->
 
-
 <!-- ================================================================== -->
 <!--                      MULAI TAMPILAN FOOTER                            -->
 <!-- ================================================================== -->
@@ -84,7 +65,6 @@
 <!-- ================================================================== -->
 <!--                      SELESAI TAMPILAN FOOTER                       -->
 <!-- ================================================================== -->
-
 
 </div>
 <!-- ================================================================== -->
@@ -110,16 +90,64 @@
 
     <!-- DataTables JavaScript -->
     <script src="<?php echo base_url('vendor/datatables/js/jquery.dataTables.min.js') ?>" ></script>
-    <script src="<?php echo base_url('vendor/datatables-plugins/dataTables.bootstrap.min.js') ?>" ></script>
-    <script src="<?php echo base_url('vendor/datatables-responsive/dataTables.responsive.js') ?>" ></script>
+    <script src="<?php echo base_url('vendor/datatables-plugins/dataTables.bootstrap.min.js') ?>"  ></script>
+    <script src="<?php echo base_url('vendor/datatables-responsive/dataTables.responsive.js') ?>"  ></script>
 
     <script>
-    $(document).ready(function() {
-        $('#dataTables-pejabat').DataTable({
-            responsive: true
+        $(document).ready(function() {
+            $('#table').DataTable({
+                "processing": true,
+                "serverSide": true,
+
+                "order": [], 
+                "ajax": {
+                    "url": "<?php echo site_url('pejabat/get_data'); ?>",
+                    "type": "POST"
+                },
+                "columns": [
+
+                    {"data": null,width: 10}, // Add row_number column
+                        {"data": "id",width:10},
+                        {"data": "nama",width:100},
+                        {"data": "jenis_kelamin",width:10},
+                        {"data": "alamat",width:100},
+                        {"data": "nama_master",width:50},
+                        {"data": "tglBuat",width:100},
+                        {"data": "tglUbah",width:100},
+                        {
+                            "data": null,
+                            "width": 100,
+                            "orderable": false,
+                            "render": function(data, type, row) {
+                                var editUrl = "<?php echo site_url('pejabat/edit'); ?>/" + row.id;
+                                var deleteUrl = "<?php echo site_url('pejabat/delete'); ?>/" + row.id;
+
+                                return '<a href="' + editUrl + '" class="btn btn-warning btn-sm">Edit</a>' +
+                                        ' ' +
+                                       '<a href="' + deleteUrl + '" class="btn btn-danger btn-sm ml-2" onclick="return confirmDelete()">Delete</a>';
+
+                            }
+                        }
+                ],
+                "createdRow": function(row, data, index) {
+                $('td', row).eq(0).html(index + 1);
+            }
+                
+            });
         });
-    });
+    </script>
+
+    <script>
+        function confirmDelete() {
+    return confirm('Apakah Anda yakin ingin menghapus data ini?');
+}
     </script>
 
 </body>
+
 </html>
+
+
+
+
+

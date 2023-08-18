@@ -5,15 +5,6 @@ class Pejabat_model extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
-    
-    public function get_all()
-    {
-        $this->db->select('pejabat.*, master_pejabat.nama AS nama_master');
-        $this->db->from('pejabat');
-        $this->db->join('master_pejabat', 'pejabat.m_pejabat_id = master_pejabat.id', 'left');            
-        $query = $this->db->get();
-        return $query->result();
-    }
 
     public function get_by_id($id)
     {
@@ -43,14 +34,47 @@ class Pejabat_model extends CI_Model {
         }
     }
 
-    public function cariPejabatByNama($search) {
+    public function get_data($start, $length, $search) {
+
+
         $this->db->select('pejabat.*, master_pejabat.nama AS nama_master');
-        $this->db->from('pejabat' );
-        $this->db->join('master_pejabat', 'pejabat.m_pejabat_id = master_pejabat.id', 'left'); 
-        $this->db->like('pejabat.nama', $search);
+        $this->db->from('pejabat');
+        $this->db->join('master_pejabat', 'pejabat.m_pejabat_id = master_pejabat.id', 'left');            
+        if (!empty($search)) {
+            $this->db->like('pejabat.nama', $search); // kolom yang ingin dicari
+            $this->db->or_like('pejabat.alamat', $search);
+            $this->db->or_like('master_pejabat.nama', $search);
+        }
+        $this->db->order_by('id', 'asc'); //mengurutkan data berdasarkan id
+        $this->db->limit($length, $start);
         $query = $this->db->get();
         return $query->result();
     }
+
+    public function get_pejabat_options() 
+    {
+        $this->db->select('id, nama'); // Kolom yang ingin ditampilkan sebagai pilihan
+        $query = $this->db->get('pejabat');
+        return $query->result();
+    }
+
+    public function get_total_records() {
+        return $this->db->count_all('pejabat'); 
+    }
+
+    public function get_filtered_records($search) {
+
+  
+        $this->db->join('master_pejabat', 'pejabat.m_pejabat_id = master_pejabat.id', 'left');  
+
+        $this->db->like('pejabat.nama', $search); //kolom yang mau dicari
+        $this->db->or_like('pejabat.alamat', $search);
+        $this->db->or_like('master_pejabat.nama', $search);
+        return $this->db->get('pejabat')->num_rows();  
+    }
+
+
+
 
 }
 
