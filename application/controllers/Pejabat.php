@@ -33,31 +33,6 @@ class Pejabat extends CI_Controller {
         echo json_encode($response);
     }
 
- /*    public function create()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-           $data = array(
-               'nama' => $this->input->post('nama'),
-               'jenis_kelamin' => $this->input->post('jenis_kelamin'),
-               'alamat' => $this->input->post('alamat'),
-               'm_pejabat_id' => $this->input->post('m_pejabat_id'),
-           );
-
-           $result = $this->Pejabat_model->insert($data); // Panggil method simpan dari model
-           if ($result) {
-               $this->session->set_flashdata('error', 'Gagal menyimpan data');
-            } else {
-                $this->session->set_flashdata('success', 'Data berhasil disimpan');
-           }
-            redirect('pejabat');//nama controller
-        } else {
-        $this->load->model('Master_pejabat_model');
-        $data['pejabat_options'] = $this->Master_pejabat_model->get_pejabat_options();
-        $this->load->view('pejabat/create', $data);
-        }        
-    } */
-
-
     public function search_pejabat() //fungsi untuk JSON pada create dan edit data pejabat bagian input jabatan
 {
     $search_query = $this->input->get('q'); //parameter yang mau diambil bisa diisi bebas
@@ -75,7 +50,6 @@ class Pejabat extends CI_Controller {
 
     echo json_encode($response);
 }
-
 
     public function create()
     {
