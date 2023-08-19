@@ -1,6 +1,7 @@
 <?php
 class Master_pejabat_model extends CI_Model {
 
+
      public function get_data($start, $length, $search) {
         $this->db->select('*');
         $this->db->from('master_pejabat');
@@ -41,10 +42,12 @@ class Master_pejabat_model extends CI_Model {
         }
     }
 
+    //untuk ambil data nama dari tabel master_pejabat di select untuk tabel pejabat
     public function get_pejabat_options() 
     {
-        $this->db->select('id, nama'); // Kolom yang ingin ditampilkan 
+        $this->db->select('id, nama'); // Kolom yang ingin ditampilkan / diambil datanya
         $query = $this->db->get('master_pejabat');
+
         return $query->result();
     }
 
@@ -57,8 +60,14 @@ class Master_pejabat_model extends CI_Model {
         return $this->db->get('master_pejabat')->num_rows();
     }
 
+    //buat select2
+    public function search_pejabat($search_query) {
+        $this->db->select('id, nama');
+        $this->db->like('nama', $search_query); 
+        $query = $this->db->get('master_pejabat'); 
 
-
+        return $query->result(); 
+    }
 
 }
 ?>

@@ -35,8 +35,6 @@ class Pejabat_model extends CI_Model {
     }
 
     public function get_data($start, $length, $search) {
-
-
         $this->db->select('pejabat.*, master_pejabat.nama AS nama_master');
         $this->db->from('pejabat');
         $this->db->join('master_pejabat', 'pejabat.m_pejabat_id = master_pejabat.id', 'left');            
@@ -51,20 +49,12 @@ class Pejabat_model extends CI_Model {
         return $query->result();
     }
 
-    public function get_pejabat_options() 
-    {
-        $this->db->select('id, nama'); // Kolom yang ingin ditampilkan sebagai pilihan
-        $query = $this->db->get('pejabat');
-        return $query->result();
-    }
-
     public function get_total_records() {
         return $this->db->count_all('pejabat'); 
     }
 
+    //pencarian di datatables
     public function get_filtered_records($search) {
-
-  
         $this->db->join('master_pejabat', 'pejabat.m_pejabat_id = master_pejabat.id', 'left');  
 
         $this->db->like('pejabat.nama', $search); //kolom yang mau dicari
@@ -72,9 +62,6 @@ class Pejabat_model extends CI_Model {
         $this->db->or_like('master_pejabat.nama', $search);
         return $this->db->get('pejabat')->num_rows();  
     }
-
-
-
 
 }
 

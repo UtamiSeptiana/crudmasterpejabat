@@ -9,48 +9,46 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Edit Pejabat</h1>
+                <h1 class="page-header">Tambah Pejabat</h1>
             </div>
         </div>
 
         <div class="panel panel-default col-lg-6">
             <div class="panel-body">
                 <form class="form" method="post" action="">
-                    <label for="nama">NAMA</label>
-                        <input class="form-control" type="text" name="nama" value="<?php echo $pejabat->nama; ?>" required>
-                    <br>
+                    <?php echo validation_errors(); ?>
+
+                    <label for="nama">Nama</label>
+                        <input class="form-control" type="text" name="nama" required>
                     <br>
 
-                    <label for="jenis_kelamin">JENIS KELAMIN</label>
+                    <label>Jenis Kelamin</label>
                         <div class="radio">
-                            <label><input type="radio" name="jenis_kelamin" value="L" <?php if ($pejabat->jenis_kelamin == "L") echo "checked"; ?>> Laki-laki </label>
+                            <label><input class="radio" type="radio" name="jenis_kelamin" value="L" required>Laki-laki</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="jenis_kelamin" value="P" <?php if ($pejabat->jenis_kelamin == "P") echo "checked"; ?>> Perempuan </label>        
+                            <label><input class="radio" type="radio" name="jenis_kelamin" value="P" required>Perempuan</label>
                         </div>
                     <br>
 
-                    <label for="alamat">ALAMAT</label>
-                        <input class="form-control" type="text" name="alamat" value="<?php echo $pejabat->alamat; ?>" required>
-                    <br>
+                    <label for="alamat">Alamat</label>
+                        <input class="form-control"  type="text" name="alamat" required>
                     <br>
 
-                    <label for="m_pejabat_id">JABATAN</label>
-                        <select class="js-example-basic-single form-control" id="m_pejabat_id"  name="m_pejabat_id">
-                            <?php foreach ($pejabat_options as $master_pejabat): ?>
-                                <option value="<?= $master_pejabat->id ?>" <?= ($master_pejabat->id == $pejabat->m_pejabat_id) ? 'selected' : '' ?>>
-                                    <?= $master_pejabat->nama ?>
-                                </option>
-                            <?php endforeach; ?>
+                    <label for="m_pejabat_id">Pilih Pejabat</label>
+                        <select class="js-example-basic-single form-control" required name="m_pejabat_id">
+                        <option value="">-- PILIH JABATAN ANDA --</option>
+                            <?php foreach ($pejabat_options as $pejabat) { ?>
+                                <option value="<?php echo $pejabat->id; ?>"><?php echo $pejabat->nama; ?></option>
+                            <?php } ?>
                         </select>
-                    <br>
-
-                    <div>
                         <br>
-                        <a class="btn btn-danger" href="<?php echo site_url('pejabat'); ?>" class="button-kembali">Kembali</a>
-                        <button class="btn btn-primary" type="submit">Ubah</button>
-                    </div>
+                        <br>
 
+                        <div>
+                            <a class="btn btn-danger" href="<?php echo site_url('pejabat'); ?>" class="button-kembali">Kembali</a>
+                            <button class="btn btn-primary" type="submit">Simpan</button>
+                        </div>
                 </form>
             </div>
                         <!-- /.panel-body -->
@@ -61,8 +59,6 @@
 <!-- ================================================================== -->
 <!--                    SELESAI TAMPILAN ISI                            -->
 <!-- ================================================================== -->
-
-
 
 
 <!-- ================================================================== -->
@@ -99,29 +95,10 @@
     <script src="<?php echo base_url('vendor/select2/dist/js/select2.min.js'); ?>"></script>
 
     <script>
-   $(document).ready(function() {
-    $('#m_pejabat_id').select2({
-        ajax: {
-            url: '<?php echo site_url('pejabat/search_pejabat'); ?>',
-            dataType: 'json',
-            delay: 250,
-            data: function(params) {
-                return {
-                    q: params.term // Parameter pencarian yang dibikin di fungsi pada controller
-                };
-            },
-            processResults: function(data) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 0
-    });
-});
-
-</script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
+    </script>
 
 </body>
 

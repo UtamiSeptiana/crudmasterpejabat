@@ -36,12 +36,11 @@
                     <br>
 
                     <label for="m_pejabat_id">Pilih Pejabat</label>
-                        <select class="js-example-basic-single form-control" required name="m_pejabat_id">
-                        <option value="">-- PILIH JABATAN ANDA --</option>
-                            <?php foreach ($pejabat_options as $pejabat) { ?>
-                                <option value="<?php echo $pejabat->id; ?>"><?php echo $pejabat->nama; ?></option>
-                            <?php } ?>
-                        </select>
+                    <select class="form-control" name="m_pejabat_id" id="m_pejabat_id">
+                        <option value="">Pilih Nama Pejabat</option>
+                    </select>
+
+
                         <br>
                         <br>
 
@@ -99,6 +98,31 @@
             $('.js-example-basic-single').select2();
         });
     </script>
+
+<script>
+   $(document).ready(function() {
+    $('#m_pejabat_id').select2({
+        ajax: {
+            url: '<?php echo site_url('pejabat/search_pejabat'); ?>', //diisi nama controller dan fungsinya
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    q: params.term // Parameter pencarian, parameter yang dibikin di fungsi controller
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 0
+    });
+});
+
+</script>
 
 </body>
 
