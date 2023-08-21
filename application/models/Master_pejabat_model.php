@@ -64,6 +64,7 @@ class Master_pejabat_model extends CI_Model {
     public function search_pejabat($search_query) {
         $this->db->select('id, nama');
         $this->db->like('nama', $search_query); 
+        $this->db->limit(10);//menampilkan 10data saat load awal dan search
         $query = $this->db->get('master_pejabat'); 
 
         return $query->result(); 
