@@ -69,5 +69,13 @@ class Master_pejabat_model extends CI_Model {
         return $query->result(); 
     }
 
+
+    //menghitung data tabel relasi
+    public function countDirektur() {
+        $this->db->where('nama', 'Kepala Ruang');
+        return $this->db->count_all_results('master_pejabat');
+    }
+
+
 }
 ?>

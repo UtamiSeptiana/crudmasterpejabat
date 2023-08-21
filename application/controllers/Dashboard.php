@@ -8,7 +8,11 @@ class Dashboard extends CI_Controller {
         $this->load->model('Pejabat_model');
         $data['total_pejabat'] = $this->Pejabat_model->get_total_records();
 
+        $data['total_dir'] = $this->Pejabat_model->getPejabatCountByDirektur();
+
+
         $this->load->view('dashboard', $data);
     }
+
 }
 ?>

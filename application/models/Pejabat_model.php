@@ -63,6 +63,18 @@ class Pejabat_model extends CI_Model {
         return $this->db->get('pejabat')->num_rows();  
     }
 
+
+    //Menghitung tabel relasi
+    public function getPejabatCountByDirektur() {
+        $this->db->select('COUNT(*) as jumlah_direktur');
+        $this->db->from('pejabat');
+        $this->db->join('master_pejabat', 'pejabat.m_pejabat_id = master_pejabat.id');
+        $this->db->where('master_pejabat.nama', 'Kepala Ruang');
+        $query = $this->db->get();
+        $result = $query->row_array();
+        return $result['jumlah_direktur'];
+    }
+
 }
 
 ?>
