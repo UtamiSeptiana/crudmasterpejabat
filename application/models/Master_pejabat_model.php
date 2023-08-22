@@ -61,14 +61,29 @@ class Master_pejabat_model extends CI_Model {
     }
 
     //buat select2
-    public function search_pejabat($search_query) {
+/*     public function search_pejabat($search_query) {
         $this->db->select('id, nama');
         $this->db->like('nama', $search_query); 
         $this->db->limit(10);//menampilkan 10data saat load awal dan search
         $query = $this->db->get('master_pejabat'); 
 
         return $query->result(); 
+    } */
+
+
+    public function get_data_paginated($search, $page, $limit) {
+        $offset = ($page - 1) * $limit;
+
+        $this->db->select('id, nama'); // Kolom yang ingin ditampilkan
+        $this->db->from('master_pejabat'); // Ganti dengan nama tabel Anda
+        $this->db->like('nama', $search); // Misalnya, pencarian berdasarkan nama
+
+        $this->db->limit($limit, $offset);
+        $query = $this->db->get();
+
+        return $query->result();
     }
+
 
 
     //menghitung data tabel relasi
