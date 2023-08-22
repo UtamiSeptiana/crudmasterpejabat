@@ -13,6 +13,7 @@ class Pejabat extends CI_Controller {
         $this->load->view('pejabat/index');
     }
 
+    //MEMANGGIL DATA TABEL DENGAN DATATABLES SIDE-SERVER
     public function get_data() {
         $draw = $this->input->post('draw');
         $start = $this->input->post('start');
@@ -33,48 +34,35 @@ class Pejabat extends CI_Controller {
         echo json_encode($response);
     }
 
-/*     public function search_pejabat() //fungsi untuk JSON pada create dan edit data pejabat bagian input jabatan
-{
-    $search_query = $this->input->get('q'); //parameter yang mau diambil bisa diisi bebas
 
-    $this->load->model('Master_pejabat_model');
-    $pejabat_data = $this->Master_pejabat_model->search_pejabat($search_query); 
+    //MENAMPILKAN OPTION SELECT DENGAN JUMLAH DATA SESUAI YANG INGIN DITAMPILKAN
+    public function select_data() {
+        $this->load->model('Master_pejabat_model'); 
 
-    $response = array();
-    foreach ($pejabat_data as $pejabat) {
-        $response[] = array(
-            'id' => $pejabat->id, 
-            'text' => $pejabat->nama, //kolom data yang akan diambil
+        $search = $this->input->get('q');
+        $page = $this->input->get('page');
+        $page_limit = 10; // JUMLAH DATA YANG TAMPIL
+
+        $data = $this->Master_pejabat_model->get_data_paginated($search, $page, $page_limit);
+        $total_count = $this->Master_pejabat_model->get_total_count($search);
+
+        $response = array(
+            'results' => array(),
+            'pagination' => array(
+                'more' => ($page * $page_limit) < $total_count
+            )
         );
+
+        foreach ($data as $pejabat) {
+            $response['results'][] = array(
+                'id' => $pejabat->id, 
+                'text' => $pejabat->nama, //KOLOM YANG AKAN DIAMBIL DATANYA
+            );
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
     }
-
-    echo json_encode($response);
-} */
-
-
-
-public function select_data() {
-    $this->load->model('Master_pejabat_model'); // Ganti dengan model yang sesuai
-
-    $search = $this->input->get('q');
-    $page = $this->input->get('page');
-    $page_limit = 10; // Jumlah item per halaman
-
-    $data = $this->Master_pejabat_model->get_data_paginated($search, $page, $page_limit);
-    $response = array();
-    foreach ($data as $pejabat) {
-        $response[] = array(
-            'id' => $pejabat->id, 
-            'text' => $pejabat->nama, //kolom data yang akan diambil
-        );
-    }
-
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    
-}
-
-
 
     public function create()
     {
@@ -100,7 +88,6 @@ public function select_data() {
         }        
     }
 
-
     public function edit($id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -125,7 +112,6 @@ public function select_data() {
             $this->load->view('pejabat/edit', $data);
         }
     }
-
     
     public function delete($id)
     {

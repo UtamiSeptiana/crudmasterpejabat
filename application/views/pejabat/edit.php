@@ -98,57 +98,33 @@
 
     <script src="<?php echo base_url('vendor/select2/dist/js/select2.min.js'); ?>"></script>
 
-<!--     <script>
-   $(document).ready(function() {
-    $('#m_pejabat_id').select2({
-        ajax: {
-            url: '<?php echo site_url('pejabat/search_pejabat'); ?>',
-            dataType: 'json',
-            delay: 250,
-            data: function(params) {
-                return {
-                    q: params.term // Parameter pencarian yang dibikin di fungsi pada controller
-                };
-            },
-            processResults: function(data) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 0
-    });
-});
+    <script>
+        $(document).ready(function() {
+            $('#m_pejabat_id').select2({
+                    ajax: {
+                        url: '<?= site_url('pejabat/select_data') ?>',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                q: params.term,
+                                page: params.page || 1
+                            };
+                        },
+                        processResults: function(data, params) {
+                            params.page = params.page || 1;
 
-</script> -->
-
-
-<script>
-        $('#m_pejabat_id').select2({
-            ajax: {
-                url: '<?= site_url('pejabat/select_data') ?>',
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        q: params.term,
-                        page: params.page || 1
-                    };
-                },
-                processResults: function(data, params) {
-                    params.page = params.page || 1;
-
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 10) < data.total_count // Ubah 10 sesuai dengan page_limit di controller
-                        }
-                    };
-                },
-                cache: true
-            },
-            minimumInputLength: 0
+                            return {
+                                results: data.results,
+                                pagination: {                    
+                                more: data.pagination.more
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    minimumInputLength: 0
+                });
         });
     </script>
 

@@ -13,6 +13,7 @@ class Master_pejabat extends CI_Controller {
         $this->load->view('master_pejabat/index');
     }
 
+    //UNTUK MENAMPLKAN DATA TABEL DENGAN MENGGUNAKAN DATATABLES SIDE-SERVER
     public function get_data() {
         $draw = $this->input->post('draw');
         $start = $this->input->post('start');

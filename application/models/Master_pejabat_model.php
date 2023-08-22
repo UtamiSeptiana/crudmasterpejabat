@@ -60,38 +60,33 @@ class Master_pejabat_model extends CI_Model {
         return $this->db->get('master_pejabat')->num_rows();
     }
 
-    //buat select2
-/*     public function search_pejabat($search_query) {
-        $this->db->select('id, nama');
-        $this->db->like('nama', $search_query); 
-        $this->db->limit(10);//menampilkan 10data saat load awal dan search
-        $query = $this->db->get('master_pejabat'); 
-
-        return $query->result(); 
-    } */
-
-
-    public function get_data_paginated($search, $page, $limit) {
-        $offset = ($page - 1) * $limit;
-
-        $this->db->select('id, nama'); // Kolom yang ingin ditampilkan
-        $this->db->from('master_pejabat'); // Ganti dengan nama tabel Anda
-        $this->db->like('nama', $search); // Misalnya, pencarian berdasarkan nama
-
-        $this->db->limit($limit, $offset);
-        $query = $this->db->get();
-
-        return $query->result();
-    }
-
-
-
     //menghitung data tabel relasi
     public function countDirektur() {
         $this->db->where('nama', 'Kepala Ruang');
         return $this->db->count_all_results('master_pejabat');
     }
 
+    public function get_data_paginated($search, $page, $page_limit) {
+        $offset = ($page - 1) * $page_limit;
+
+        $this->db->select('id, nama'); // Sesuaikan kolom yang ingin diambil
+        $this->db->from('master_pejabat'); // Ganti dengan nama tabel yang sesuai
+        if ($search) {
+            $this->db->like('nama', $search); // Gunakan kriteria pencarian
+        }
+        $this->db->limit($page_limit, $offset);
+
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function get_total_count($search) {
+        $this->db->from('master_pejabat'); // Ganti dengan nama tabel yang sesuai
+        if ($search) {
+            $this->db->like('nama', $search); // Gunakan kriteria pencarian
+        }
+        return $this->db->count_all_results();
+    }
 
 }
 ?>
