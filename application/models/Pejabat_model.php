@@ -6,9 +6,16 @@ class Pejabat_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_by_id($id)
+    public function get_by_id($id) //ganti jadi ada join
     {
-        return $this->db->get_where('pejabat', array('id' => $id))->row();
+      /*   return $this->db->get_where('pejabat', array('id' => $id))->row(); */
+        $this->db->select('pejabat.*, master_pejabat.nama as nama_master');
+        $this->db->from('pejabat');
+        $this->db->join('master_pejabat', 'pejabat.m_pejabat_id = master_pejabat.id');
+        $this->db->where('pejabat.id', $id);
+        $query = $this->db->get();
+        return $query->row();
+       
     }
 
     public function insert($data)

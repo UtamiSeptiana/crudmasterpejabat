@@ -37,7 +37,7 @@
                         <th>NO</th>
                             <th>ID</th>
                             <th>NAMA</th>
-                            <th>JENIS KELAMIN</th>
+                            <th>JK</th>
                             <th>ALAMAT</th>
                             <th>M_PEJABAT_ID</th>
                             <th>TANGGAL BUAT</th>

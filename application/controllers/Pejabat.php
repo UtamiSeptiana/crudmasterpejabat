@@ -20,6 +20,7 @@ class Pejabat extends CI_Controller {
         $length = $this->input->post('length');
         $search = $this->input->post('search')['value'];
 
+        
         $recordsTotal = $this->Pejabat_model->get_total_records();
         $recordsFiltered = $this->Pejabat_model->get_filtered_records($search);
         $data = $this->Pejabat_model->get_data($start, $length, $search); 
@@ -83,8 +84,7 @@ class Pejabat extends CI_Controller {
             redirect('pejabat');//nama controller
         } else {
             $this->load->model('Master_pejabat_model');
-            $data = $this->Master_pejabat_model->get_pejabat_options();
-            $this->load->view('pejabat/create', $data);
+           $this->load->view('pejabat/create');
         }        
     }
 
@@ -107,8 +107,6 @@ class Pejabat extends CI_Controller {
             redirect('pejabat');
         } else {
             $data['pejabat'] = $this->Pejabat_model->get_by_id($id);
-            $this->load->model('Master_pejabat_model');
-            $data['pejabat_options'] = $this->Master_pejabat_model->get_pejabat_options();           
             $this->load->view('pejabat/edit', $data);
         }
     }

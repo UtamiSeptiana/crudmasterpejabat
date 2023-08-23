@@ -36,13 +36,9 @@
                     <br>
 
                     <label for="m_pejabat_id">JABATAN</label>
-                        <select class="js-example-basic-single form-control" id="m_pejabat_id"  name="m_pejabat_id">
-                            <?php foreach ($pejabat_options as $master_pejabat): ?>
-                                <option value="<?= $master_pejabat->id ?>" <?= ($master_pejabat->id == $pejabat->m_pejabat_id) ? 'selected' : '' ?>>
-                                    <?= $master_pejabat->nama ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                    <select class="js-example-basic-single form-control" id="m_pejabat_id"  name="m_pejabat_id">
+
+                    </select>    
                     <br>
 
                     <div>
@@ -124,8 +120,16 @@
                         cache: true
                     },
                     minimumInputLength: 0
+
                 });
-        });
+
+                    var pejabatId = <?= $pejabat->m_pejabat_id ?>;
+                    var masterNama = '<?= $pejabat->nama_master ?>';
+
+                    var newOption = new Option(masterNama, pejabatId, true, true);
+                    $('#m_pejabat_id').append(newOption).trigger('change');
+                        });
+
     </script>
 
 </body>
